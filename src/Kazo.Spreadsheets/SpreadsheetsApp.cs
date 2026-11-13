@@ -1,4 +1,5 @@
 using Kazo.Os.App.Abstractions;
+using Kazo.Spreadsheets.Documents;
 
 namespace Kazo.Spreadsheets;
 
@@ -7,9 +8,9 @@ namespace Kazo.Spreadsheets;
 /// this class (Kazo.Os.App.Build); it is never instantiated at run time.
 /// </summary>
 /// <remarks>
-/// Work item 1 declares the base: identity, the window and its size, several windows at once.
-/// Work item 2 adds the document formats (decision 6), the OS dialogs and the capabilities they
-/// need, when the window runs GridCraft through the Kazo.Os.AppSdk.Craft module.
+/// Work item 1 declared the base: identity, the window and its size, several windows at once.
+/// Work item 2 adds the document formats (decision 6, <see cref="SpreadsheetFormats"/>), the OS
+/// dialogs and the capabilities they need, with the window on the Kazo.Os.AppSdk.Craft module.
 /// </remarks>
 [AppManifest]
 public sealed class SpreadsheetsApp : AppDefinition
@@ -56,8 +57,29 @@ public sealed class SpreadsheetsApp : AppDefinition
     public override bool SingleInstancePerUser => false;
 
     /// <inheritdoc />
-    /// <remarks>None yet: work item 2 asks for the dialogs and the files it opens and saves.</remarks>
-    public override IReadOnlyList<string> Capabilities => [];
+    /// <remarks>
+    /// The OS Open and Save dialogs, the user's files (a file chosen in a dialog outside the home
+    /// folder is reached through the dialog's grant), <c>apps.launch</c> to open a file in another
+    /// window, and the private folder where GridCraft's settings live
+    /// (<c>~/.config/ca.kazo.spreadsheets/</c>).
+    /// </remarks>
+    public override IReadOnlyList<string> Capabilities =>
+    [
+        AppCapabilities.DialogFileOpen,
+        AppCapabilities.DialogFileSave,
+        AppCapabilities.FileSystemUserHomeRead,
+        AppCapabilities.FileSystemUserHomeWrite,
+        AppCapabilities.FileSystemPrivateRead,
+        AppCapabilities.FileSystemPrivateWrite,
+        AppCapabilities.AppsLaunch,
+    ];
+
+    /// <inheritdoc />
+    /// <remarks>
+    /// Workbooks, CSV and TSV with <c>open</c> and <c>edit</c> (Kazo Spreadsheets becomes their
+    /// app); text and JSON with <c>open</c> only, for "Open with" (decision 6, Q2 = A).
+    /// </remarks>
+    public override IReadOnlyList<FileHandler> FileHandlers => SpreadsheetFormats.FileHandlers;
 
     /// <inheritdoc />
     public override IReadOnlyList<string> Icons => ["icons/app.svg"];

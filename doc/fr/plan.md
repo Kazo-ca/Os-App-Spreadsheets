@@ -121,10 +121,69 @@ dépôts `storytold`) :
 - GridCraft : dire `saveAs` à l'hôte (comme `host_save` de WordCraft), selon Q1 ;
 - `craft-libs` : se joindre à #611 (confirmation d'enregistrement) et #610 (`open-request`).
 
+## Chantier 2 : la fenêtre (2026-11-13)
+
+La fenêtre tourne sur le module `Kazo.Os.AppSdk.Craft` de la série `craft-host/base` (sous-module
+de l'OS sur `940ccd9`). Ce que Kazo Spreadsheets garde à lui :
+
+| Fichier | Rôle |
+| --- | --- |
+| `wwwroot/host/index.html` | page de l'iframe : canevas `gridcraft_canvas` `data-craft-app="gridcraft"` `data-craft-build="../gridcraft/gridcraft.json"`, `craft-proxy.js` et `craft-page.css` du module |
+| `Documents/SpreadsheetFormats.cs` | formats de la décision 6 (Q2 = A), copies PDF et HTML, nom d'enregistrement (`SaveNameOf`), « tout ce qui n'est pas `.xlsx` est une copie » (`IsCopyName`) |
+| `Documents/GridCraftWorkbooks.cs` | lit `ui.inspect` de GridCraft (`documents[{title, dirty}]` et `windows[{doc, index, active}]`) pour la garde de fermeture |
+| `Hosting/GridCraftLanguage.cs` | code de langue de GridCraft (deux lettres) ; chinois, japonais et coréen restent en anglais (pas de police CJK dans la version web) |
+| `Hosting/SpreadsheetKeys.cs` | raccourcis réservés : ceux de l'OS, Ctrl+N (nouvelle fenêtre), F12 et Ctrl+Shift+S (Enregistrer sous) |
+| `SpreadsheetsWindow.*` | démarrage, réessai et délai, ouvrir, enregistrer, Enregistrer sous, fermeture, sélecteur de fichiers, réglages, thème, langue, auteur |
+
+Ce qui a été décidé en écrivant le code :
+
+- **Enregistrer sous (Q1 = A).** F12 et Ctrl+Shift+S arrivent à la fenêtre, qui arme un
+  « Enregistrer sous » puis lance `file.saveAs` de GridCraft ; le `save` qui suit est décidé avec
+  `saveAs: true` (dialogue de l'OS, puis liaison au nouveau fichier). Passer par la sauvegarde de
+  GridCraft plutôt que par `file.saveBytes` garde juste son état « modifié ». Le SDK n'a pas de menu
+  de fenêtre : les raccourcis sont l'entrée de la commande. Le bouton Enregistrer sous de la page
+  Fichier de GridCraft reste un Enregistrer (limite de la fiche du Store).
+- **Liaison sous le nom du fichier.** Un fichier ouvert est lié sous son propre nom
+  (`Budget.csv`). GridCraft l'enregistre sous `Budget.xlsx` : autre nom, donc le dialogue de l'OS ;
+  un `.csv`, `.ods` ou `.xlsm` n'est jamais réécrit avec des octets `.xlsx`. Un `.xlsx` est réécrit
+  en place.
+- **Copies.** Tout enregistrement qui n'est pas `.xlsx` est une copie (PDF, CSV et HTML exportés),
+  même si `.csv` s'ouvre dans Kazo Spreadsheets.
+- **Pas de renommage.** GridCraft n'a pas de `file.rename` : après un Enregistrer sous, son titre
+  garde l'ancien nom ; la fenêtre de l'OS montre le fichier, et l'enregistrement suivant va au bon
+  fichier (la liaison).
+- **Garde de fermeture.** « Oui » montre chaque classeur modifié (`window.activate`) puis
+  l'enregistre (`file.save`) : GridCraft compte un enregistrement remis à la page comme celui du
+  classeur de sa fenêtre active. La fermeture attend d'abord la fin d'une écriture en cours :
+  GridCraft compte le classeur comme enregistré dès qu'il a remis les octets, et fermer pendant
+  l'écriture perdait le fichier (trouvé par un parcours Playwright).
+- **Changement d'écran** (issue #4) : `canChangeScreen: false` attend que l'ADR 0263 de l'OS
+  (Os#484, vers `main`) arrive dans la version de l'OS visée ; le chantier 4 le déclare.
+- **Sélecteur.** Fichier › Ouvrir de GridCraft montre le dialogue de l'OS ; un classeur choisi
+  s'ouvre dans la fenêtre si elle n'a qu'un classeur vierge intact, sinon dans une nouvelle
+  fenêtre. Une image (Insertion › Image) est lue et remise à GridCraft.
+- **Thème et langue.** `ui.set { dark }` à chaque changement du thème de l'OS,
+  `app.language.set { language }` au démarrage.
+- **CI.** Le module n'est pas encore sur nuget.org : la CI vérifie que le sous-module est sur
+  `craft-host/base` (`KAZOOS_BRANCH`) et construit le profil Release avec les sources
+  (`KazoOsUseSource=true`). Le chantier 4 remet le sous-module sur l'étiquette de la version de l'OS
+  et retire ces deux variables. Rien n'est publié d'ici là.
+- **Retour au module** (envoyé à la série `craft-host`) : `OpenDocument.ListFrom` lit la réponse de
+  WordCraft (`documents[].id`, `path`) et rend une liste vide pour GridCraft ; `CraftLanguage.Pick`
+  donne les codes de WordCraft (`zh-hans`, `pt-br`). Kazo Spreadsheets a les siens.
+
+Tests : 76 tests xUnit (manifeste, formats, `ui.inspect`, langue, raccourcis, page de l'iframe,
+textes fr et en) et 8 parcours Playwright dans l'OS (`npm run test:e2e` après
+`dotnet build -c Debug`) : WebGPU, WebGL 2 (`--webgl`), clavier, thème, auteur, deux fenêtres,
+Ctrl+N, enregistrer puis réenregistrer en place, réouverture par `xdg-open`, F12 et Ctrl+Shift+S,
+copie PDF, `.xlsm` non réécrit, garde de fermeture (Annuler, Oui puis Annuler, Oui), Fichier ›
+Ouvrir par le dialogue de l'OS.
+
 ## Avancement
 
 - [x] Étape 0 : lecture de GridCraft 0.19.1 et du zip officiel.
 - [x] Plan fr et en.
 - [x] Réponses de Benoit à Q1 et Q2 (A et A).
-- [ ] Chantier 1 (`spreadsheets/1-solution`) : solution renommée, manifeste, zip 0.19.1 dans `wwwroot/gridcraft/` (paquet `.kazoapp` de 9,7 Mo, 26,5 Mo décompressé), sous-module de l'OS sur 3.3.2 ; la fenêtre montre la version de GridCraft en attendant le module.
-- [ ] Chantiers 2 à 4.
+- [x] Chantier 1 (`spreadsheets/1-solution`) : solution renommée, manifeste, zip 0.19.1 dans `wwwroot/gridcraft/` (paquet `.kazoapp` de 9,7 Mo, 26,5 Mo décompressé), sous-module de l'OS sur 3.3.2 ; la fenêtre montre la version de GridCraft en attendant le module.
+- [x] Chantier 2 (`spreadsheets/2-window`) : fenêtre sur le module `Kazo.Os.AppSdk.Craft`, formats, ouvrir, enregistrer, Enregistrer sous (F12, Ctrl+Shift+S), garde de fermeture, sélecteur, thème, langue ; CI sur `craft-host/base`.
+- [ ] Chantiers 3 et 4.

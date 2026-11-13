@@ -1,18 +1,33 @@
 @inherits WindowAppBase
 
-@*
-    Work item 1: the window shows which GridCraft build the app carries. Work item 2 replaces this
-    body with the iframe of the Kazo.Os.AppSdk.Craft module (doc/en/plan.md, decisions 2 and 3).
-*@
-<div class="sheet-window">
-    <div class="sheet-card">
-        <img class="sheet-icon" src="@IconPath" alt="" />
-        <h1 class="sheet-title">@Manifest.Name</h1>
-        <p class="sheet-detail">GridCraft @GridCraftBuild.Version</p>
-    </div>
-</div>
+<div class="sheet-window" role="application" aria-label="@L["EditorLabel"]">
+    @* craft-host.js (Kazo.Os.AppSdk.Craft) puts GridCraft's iframe in this element; it stays hidden until GridCraft is ready. *@
+    <div class="sheet-frame @(_startup.State == FrameState.Running ? "running" : string.Empty)" @ref="_frameHost"></div>
 
-@code {
-    /// <summary>The app icon, served with the app's static files.</summary>
-    private const string IconPath = "_content/Kazo.Spreadsheets/icons/app.svg";
-}
+    @if (_startup.State == FrameState.Loading)
+    {
+        <div class="sheet-screen" role="status">
+            <div class="sheet-spinner" aria-hidden="true"></div>
+            <p class="sheet-screen-title">@L["Loading"]</p>
+            <p class="sheet-screen-hint">@L["LoadingHint"]</p>
+        </div>
+    }
+    else if (_startup.State == FrameState.Failed)
+    {
+        <div class="sheet-screen failed" role="alert">
+            <p class="sheet-screen-title">@L["FailedTitle"]</p>
+            <p class="sheet-screen-detail">@FailureText</p>
+            <p class="sheet-screen-hint">@L["FailedHint"]</p>
+            <button type="button" class="sheet-retry" @onclick="RetryAsync">@L["Retry"]</button>
+        </div>
+    }
+
+    @if (_notice is not null)
+    {
+        @* Over GridCraft, at the bottom right: a failed write, a cancelled save, a copy written. *@
+        <div class="sheet-notice @(_noticeIsError ? "error" : string.Empty)" role="@(_noticeIsError ? "alert" : "status")">
+            <span class="sheet-notice-text">@_notice</span>
+            <button type="button" class="sheet-notice-close" aria-label="@L["Dismiss"]" @onclick="DismissNotice">×</button>
+        </div>
+    }
+</div>
