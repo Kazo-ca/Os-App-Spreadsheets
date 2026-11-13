@@ -10,6 +10,8 @@ Le tableur de Kazo OS, construit sur [GridCraft](https://github.com/storytold/gr
 | `src/Kazo.Spreadsheets.Os` | Un hôte qui lance tout Kazo OS avec les apps de base et cette app : le projet à démarrer |
 | `tests/Kazo.Spreadsheets.Tests` | Les tests de l'app |
 | `external/KazoOs` | Le dépôt Kazo OS en sous-module git, sur un tag de release |
+| `external/gridcraft` | Les sources de GridCraft (notre fork `Kazo-ca/gridcraft`) en sous-module git, seulement pour compiler GridCraft |
+| `src/Kazo.Spreadsheets/wwwroot/gridcraft` | Le build web de GridCraft et sa provenance `gridcraft.json`, jamais modifiés à la main |
 | `store/` | Ce que montre le Kazo OS Store : icône (PNG 256×256), descriptions courtes, descriptions, `store.json` |
 
 ## Premiers pas
@@ -60,6 +62,24 @@ dotnet build -c Debug && npm run test:e2e   # Kazo OS dans Chromium avec Playwri
 En attendant la version de Kazo OS qui contient le module `Kazo.Os.AppSdk.Craft`, le sous-module
 est sur la branche `craft-host/base` de Kazo OS, et la CI construit Release depuis ses sources
 (voir le [plan](doc/fr/plan.md), chantier 2).
+
+## Compiler GridCraft depuis les sources
+
+L'app utilise le build de GridCraft versionné dans `src/Kazo.Spreadsheets/wwwroot/gridcraft/` ;
+construire l'app ne compile pas GridCraft. Pour changer de version de GridCraft, ou prendre un
+correctif de notre fork, déplacer le sous-module `external/gridcraft` sur un commit du fork
+`Kazo-ca/gridcraft` (branche `kazo/v<version>`), fusionner, puis lancer le workflow
+**Build GridCraft** sur la branche depuis l'onglet Actions : il compile, valide le build sur
+`gridcraft/build-<version>-<commit>`, y lance la CI et ouvre une PR. Sur un poste :
+
+```bash
+git submodule update --init --depth 1 external/gridcraft
+rustup target add wasm32-unknown-unknown   # Rust 1.95 ou plus ; Trunk 0.21.14
+tools/build-gridcraft.sh
+```
+
+`tools/vendor-gridcraft.sh` seul reprend le zip officiel épinglé par SHA-256. Les tests vérifient
+que la provenance nomme soit ce zip, soit le commit du sous-module.
 
 ## Publier dans le Kazo OS Store
 
