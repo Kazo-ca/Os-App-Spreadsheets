@@ -207,6 +207,30 @@ What was decided while writing the code:
 
 Tests: 76 xUnit tests and the 8 Playwright runs with the compiled build.
 
+## Work item 4: the Store (2026-11-13)
+
+Kazo OS 3.3.3 (the `Kazo.Os.AppSdk.Craft` module and ADR 0263) is on nuget.org.
+
+- **OS submodule on `v3.3.3`**, CI back on the Release profile with the nuget.org packages:
+  `KAZOOS_BRANCH` and `KazoOsUseSource` removed, the check script only knows the tag. The manifest
+  asks for SDK 3.3.3 (`sdkCompatibility.minimumVersion`).
+- **`canChangeScreen: false`** (issue #4): moving to another screen reloads the iframe and loses
+  the workbooks.
+- **Store listing** fr and en (`store/`), crediting GridCraft by the ArtCraft team with the known
+  limits; icon `store/icon.png` rendered from `wwwroot/icons/app.svg` (no ArtCraft logo); three
+  screenshots taken in the published Kazo OS 3.3.3 with GridCraft's sample workbooks (`sales`,
+  `budget`) and the File Explorer.
+- **README** rebuilt on the listing (`npm run store:readme`, checked by CI), "Try it" link
+  `https://os.kazo.ca/?autolaunch=ca.kazo.spreadsheets` (ADR 0258, shipped in 3.3.3).
+- **`THIRD-PARTY-NOTICES.md`** (fr, en), linked with `LICENSE` into the package (`wwwroot/legal/`)
+  next to GridCraft's notices; `LegalFilesTests`.
+- **`tests/installed`**: `kazopkg install` in the published Kazo OS 3.3.3, a `.xlsx` saved then
+  reopened by double-click, licenses present, Store screenshots: PASS. `.kazoapp` package of
+  9.9 MB, 26.7 MB unpacked.
+- Version **0.1.0**. Once Benoit merges `spreadsheets/base` into `main`: tag `v0.1.0` ("Tag a
+  release" workflow), catalog PR in `Os-AppMarketPlace`, then `npm run test:installed -- --store`
+  and the Kazo OS `features.md` row.
+
 ## Progress
 
 - [x] Step 0: reading GridCraft 0.19.1 and the official zip.
@@ -215,4 +239,5 @@ Tests: 76 xUnit tests and the 8 Playwright runs with the compiled build.
 - [x] Work item 1 (`spreadsheets/1-solution`): solution renamed, manifest, 0.19.1 zip in `wwwroot/gridcraft/` (9.7 MB `.kazoapp` package, 26.5 MB extracted), OS submodule on 3.3.2; the window shows the GridCraft version until the module arrives.
 - [x] Work item 2 (`spreadsheets/2-window`): window on the `Kazo.Os.AppSdk.Craft` module, formats, open, save, Save As (F12, Ctrl+Shift+S), close guard, picker, theme, language; CI on `craft-host/base`.
 - [x] Work item 3 (`spreadsheets/3-build-from-source`): `Kazo-ca/gridcraft` fork (branch `kazo/v0.19.1`) as a submodule, `tools/build-gridcraft.sh`, `build-gridcraft.yml` workflow, build compiled from the fork in `wwwroot/gridcraft/`.
-- [ ] Work item 4.
+- [x] Work item 4 (`spreadsheets/4-store`): OS 3.3.3, `canChangeScreen: false`, listing, icon, screenshots, README, third-party notices, install in the published OS.
+- [ ] Release: `main`, tag `v0.1.0`, catalog, `features.md`.

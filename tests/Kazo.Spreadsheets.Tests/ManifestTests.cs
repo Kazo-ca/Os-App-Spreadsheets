@@ -32,6 +32,8 @@ public sealed class ManifestTests
         Assert.Equal(760, window.DefaultHeight);
         Assert.Equal(760, window.MinWidth);
         Assert.Equal(480, window.MinHeight);
+        // Another screen is another browser document: GridCraft's iframe would reload (issue #4).
+        Assert.False(window.CanChangeScreen);
     }
 
     [Fact]
