@@ -126,4 +126,5 @@ dépôts `storytold`) :
 - [x] Étape 0 : lecture de GridCraft 0.19.1 et du zip officiel.
 - [x] Plan fr et en.
 - [x] Réponses de Benoit à Q1 et Q2 (A et A).
-- [ ] Chantiers 1 à 4.
+- [ ] Chantier 1 (`spreadsheets/1-solution`) : solution renommée, manifeste, zip 0.19.1 dans `wwwroot/gridcraft/` (paquet `.kazoapp` de 9,7 Mo, 26,5 Mo décompressé), sous-module de l'OS sur 3.3.2 ; la fenêtre montre la version de GridCraft en attendant le module.
+- [ ] Chantiers 2 à 4.

@@ -1,0 +1,36 @@
+.sheet-window {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    background: var(--kos-surface, #0d1117);
+    color: var(--kos-text, #c9d1d9);
+    font-family: var(--kos-font, system-ui, sans-serif);
+}
+
+.sheet-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    padding: 24px 32px;
+    border: 1px solid var(--kos-border, #30363d);
+    border-radius: 10px;
+    background: color-mix(in srgb, var(--kos-surface, #0d1117) 85%, #2ea043);
+}
+
+.sheet-icon {
+    width: 64px;
+    height: 64px;
+}
+
+.sheet-title {
+    margin: 0;
+    font-size: 1.2rem;
+    color: var(--kos-accent, #42d392);
+}
+
+.sheet-detail {
+    margin: 0;
+    opacity: 0.8;
+}

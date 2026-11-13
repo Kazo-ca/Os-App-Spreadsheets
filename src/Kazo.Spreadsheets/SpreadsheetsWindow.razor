@@ -1,0 +1,18 @@
+@inherits WindowAppBase
+
+@*
+    Work item 1: the window shows which GridCraft build the app carries. Work item 2 replaces this
+    body with the iframe of the Kazo.Os.AppSdk.Craft module (doc/en/plan.md, decisions 2 and 3).
+*@
+<div class="sheet-window">
+    <div class="sheet-card">
+        <img class="sheet-icon" src="@IconPath" alt="" />
+        <h1 class="sheet-title">@Manifest.Name</h1>
+        <p class="sheet-detail">GridCraft @GridCraftBuild.Version</p>
+    </div>
+</div>
+
+@code {
+    /// <summary>The app icon, served with the app's static files.</summary>
+    private const string IconPath = "_content/Kazo.Spreadsheets/icons/app.svg";
+}

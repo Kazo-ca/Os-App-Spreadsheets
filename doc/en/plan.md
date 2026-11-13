@@ -125,4 +125,5 @@ repository rules):
 - [x] Step 0: reading GridCraft 0.19.1 and the official zip.
 - [x] Plan fr and en.
 - [x] Benoit's answers to Q1 and Q2 (A and A).
-- [ ] Work items 1 to 4.
+- [ ] Work item 1 (`spreadsheets/1-solution`): solution renamed, manifest, 0.19.1 zip in `wwwroot/gridcraft/` (9.7 MB `.kazoapp` package, 26.5 MB extracted), OS submodule on 3.3.2; the window shows the GridCraft version until the module arrives.
+- [ ] Work items 2 to 4.
