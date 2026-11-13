@@ -50,6 +50,17 @@ submodule with local changes or off its tag.
 
 Force either one with `-p:KazoOsUseSource=true` or `false`.
 
+## Tests
+
+```bash
+dotnet test                       # unit tests (Debug: the Kazo OS projects of the submodule)
+dotnet build -c Debug && npm run test:e2e   # Kazo OS in Chromium with Playwright: GridCraft, open, save, close
+```
+
+Until the Kazo OS release that contains the `Kazo.Os.AppSdk.Craft` module, the submodule sits on
+the `craft-host/base` branch of Kazo OS, and CI builds Release from its sources (see the
+[plan](doc/en/plan.md), work item 2).
+
 ## Publishing to the Kazo OS Store
 
 1. Fill `store/` (icon, short descriptions, descriptions, category and tags in `store.json`).

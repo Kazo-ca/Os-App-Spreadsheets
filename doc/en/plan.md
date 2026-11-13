@@ -120,10 +120,65 @@ repository rules):
 - GridCraft: tell the host `saveAs` (like WordCraft's `host_save`), depending on Q1;
 - `craft-libs`: join #611 (save confirmation) and #610 (`open-request`).
 
+## Work item 2: the window (2026-11-13)
+
+The window runs on the `Kazo.Os.AppSdk.Craft` module of the `craft-host/base` series (OS submodule
+at `940ccd9`). What Kazo Spreadsheets keeps for itself:
+
+| File | Role |
+| --- | --- |
+| `wwwroot/host/index.html` | iframe page: canvas `gridcraft_canvas` `data-craft-app="gridcraft"` `data-craft-build="../gridcraft/gridcraft.json"`, the module's `craft-proxy.js` and `craft-page.css` |
+| `Documents/SpreadsheetFormats.cs` | formats of decision 6 (Q2 = A), PDF and HTML copies, save name (`SaveNameOf`), "everything that is not `.xlsx` is a copy" (`IsCopyName`) |
+| `Documents/GridCraftWorkbooks.cs` | reads GridCraft's `ui.inspect` (`documents[{title, dirty}]` and `windows[{doc, index, active}]`) for the close guard |
+| `Hosting/GridCraftLanguage.cs` | GridCraft's language code (two letters); Chinese, Japanese and Korean stay English (no CJK font in the web build) |
+| `Hosting/SpreadsheetKeys.cs` | reserved chords: the OS ones, Ctrl+N (new window), F12 and Ctrl+Shift+S (Save As) |
+| `SpreadsheetsWindow.*` | start, retry and timeout, open, save, Save As, close, file picker, settings, theme, language, author |
+
+What was decided while writing the code:
+
+- **Save As (Q1 = A).** F12 and Ctrl+Shift+S reach the window, which arms a "Save As" then runs
+  GridCraft's `file.saveAs`; the `save` that follows is decided with `saveAs: true` (OS dialog,
+  then binding to the new file). Going through GridCraft's own save rather than `file.saveBytes`
+  keeps its "modified" state right. The SDK has no window menu: the chords are the command's entry.
+  The Save As button of GridCraft's File page stays a Save (Store listing limit).
+- **Binding under the file's name.** An opened file is bound under its own name (`Budget.csv`).
+  GridCraft saves it as `Budget.xlsx`: another name, so the OS dialog; a `.csv`, `.ods` or `.xlsm`
+  is never rewritten with `.xlsx` bytes. An `.xlsx` is rewritten in place.
+- **Copies.** Every save that is not `.xlsx` is a copy (exported PDF, CSV and HTML), even though
+  `.csv` opens in Kazo Spreadsheets.
+- **No rename.** GridCraft has no `file.rename`: after a Save As its title keeps the old name; the
+  OS window shows the file, and the next save goes to the right file (the binding).
+- **Close guard.** "Yes" shows each modified workbook (`window.activate`) then saves it
+  (`file.save`): GridCraft counts a save handed to the page as the save of the workbook in its
+  active window. Closing first waits for a write in progress to end: GridCraft counts the
+  workbook as saved once it handed the bytes over, and closing during the write lost the file
+  (found by a Playwright run).
+- **Changing screens** (issue #4): `canChangeScreen: false` waits for the OS ADR 0263 (Os#484, to
+  `main`) to reach the targeted OS version; work item 4 declares it.
+- **Picker.** GridCraft's File › Open shows the OS dialog; a chosen workbook opens in the window
+  when it only holds an untouched blank workbook, otherwise in a new window. A picture
+  (Insert › Picture) is read and handed to GridCraft.
+- **Theme and language.** `ui.set { dark }` on every change of the OS theme,
+  `app.language.set { language }` at start.
+- **CI.** The module is not on nuget.org yet: CI checks that the submodule is on `craft-host/base`
+  (`KAZOOS_BRANCH`) and builds the Release profile from the sources (`KazoOsUseSource=true`).
+  Work item 4 puts the submodule back on the OS version's tag and removes both variables. Nothing
+  is published until then.
+- **Feedback to the module** (sent to the `craft-host` series): `OpenDocument.ListFrom` reads
+  WordCraft's answer (`documents[].id`, `path`) and returns an empty list for GridCraft;
+  `CraftLanguage.Pick` gives WordCraft's codes (`zh-hans`, `pt-br`). Kazo Spreadsheets has its own.
+
+Tests: 76 xUnit tests (manifest, formats, `ui.inspect`, language, chords, iframe page, fr and en
+texts) and 8 Playwright runs in the OS (`npm run test:e2e` after `dotnet build -c Debug`): WebGPU,
+WebGL 2 (`--webgl`), keyboard, theme, author, two windows, Ctrl+N, save then save again in place,
+reopening with `xdg-open`, F12 and Ctrl+Shift+S, PDF copy, `.xlsm` not rewritten, close guard
+(Cancel, Yes then Cancel, Yes), File › Open through the OS dialog.
+
 ## Progress
 
 - [x] Step 0: reading GridCraft 0.19.1 and the official zip.
 - [x] Plan fr and en.
 - [x] Benoit's answers to Q1 and Q2 (A and A).
-- [ ] Work item 1 (`spreadsheets/1-solution`): solution renamed, manifest, 0.19.1 zip in `wwwroot/gridcraft/` (9.7 MB `.kazoapp` package, 26.5 MB extracted), OS submodule on 3.3.2; the window shows the GridCraft version until the module arrives.
-- [ ] Work items 2 to 4.
+- [x] Work item 1 (`spreadsheets/1-solution`): solution renamed, manifest, 0.19.1 zip in `wwwroot/gridcraft/` (9.7 MB `.kazoapp` package, 26.5 MB extracted), OS submodule on 3.3.2; the window shows the GridCraft version until the module arrives.
+- [x] Work item 2 (`spreadsheets/2-window`): window on the `Kazo.Os.AppSdk.Craft` module, formats, open, save, Save As (F12, Ctrl+Shift+S), close guard, picker, theme, language; CI on `craft-host/base`.
+- [ ] Work items 3 and 4.

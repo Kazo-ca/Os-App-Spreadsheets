@@ -50,6 +50,17 @@ un sous-module modifié ou hors de son tag.
 
 Forcez l'un ou l'autre avec `-p:KazoOsUseSource=true` ou `false`.
 
+## Tests
+
+```bash
+dotnet test                       # tests unitaires (Debug : les projets Kazo OS du sous-module)
+dotnet build -c Debug && npm run test:e2e   # Kazo OS dans Chromium avec Playwright : GridCraft, ouvrir, enregistrer, fermer
+```
+
+En attendant la version de Kazo OS qui contient le module `Kazo.Os.AppSdk.Craft`, le sous-module
+est sur la branche `craft-host/base` de Kazo OS, et la CI construit Release depuis ses sources
+(voir le [plan](doc/fr/plan.md), chantier 2).
+
 ## Publier dans le Kazo OS Store
 
 1. Remplissez `store/` (icône, descriptions courtes, descriptions, catégorie et étiquettes dans `store.json`).

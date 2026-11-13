@@ -42,4 +42,53 @@ public sealed class ManifestTests
         Assert.Equal("icons/app.svg", icon.Path);
         Assert.Equal("app-icon", icon.Role);
     }
+
+    [Fact]
+    public void The_window_asks_for_the_dialogs_the_files_and_apps_launch()
+    {
+        Assert.Equal(
+            [
+                AppCapabilities.DialogFileOpen,
+                AppCapabilities.DialogFileSave,
+                AppCapabilities.FileSystemUserHomeRead,
+                AppCapabilities.FileSystemUserHomeWrite,
+                AppCapabilities.FileSystemPrivateRead,
+                AppCapabilities.FileSystemPrivateWrite,
+                AppCapabilities.AppsLaunch,
+            ],
+            _app.Capabilities);
+    }
+
+    [Theory]
+    [InlineData(".xlsx")]
+    [InlineData(".xlsm")]
+    [InlineData(".xlsb")]
+    [InlineData(".xls")]
+    [InlineData(".ods")]
+    [InlineData(".slk")]
+    [InlineData(".csv")]
+    [InlineData(".tsv")]
+    public void Kazo_Spreadsheets_is_the_default_app_of_workbooks_and_delimited_text(string extension)
+    {
+        FileHandler handler = Assert.Single(_app.FileHandlers, candidate => candidate.Extensions.Contains(extension));
+        Assert.Contains("open", handler.Actions);
+        Assert.Contains("edit", handler.Actions);
+    }
+
+    [Theory]
+    [InlineData(".txt")]
+    [InlineData(".json")]
+    public void Text_and_JSON_are_only_offered_in_open_with(string extension)
+    {
+        FileHandler handler = Assert.Single(_app.FileHandlers, candidate => candidate.Extensions.Contains(extension));
+        Assert.Equal(["open"], handler.Actions);
+    }
+
+    [Theory]
+    [InlineData(".pdf")]
+    [InlineData(".html")]
+    public void Exported_copies_are_not_associated(string extension)
+    {
+        Assert.DoesNotContain(_app.FileHandlers, candidate => candidate.Extensions.Contains(extension));
+    }
 }
