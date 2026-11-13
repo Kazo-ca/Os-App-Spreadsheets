@@ -55,11 +55,13 @@ Read on the fork [`Kazo-ca/gridcraft`](https://github.com/Kazo-ca/gridcraft) (`m
 | 2 | Shared code | The Kazo OS `Kazo.Os.AppSdk.Craft` module (ADR 0247, Benoit, 2026-11-13). Kazo Spreadsheets builds against the OS submodule on `craft-host/base` until the OS that contains the module is released; its Store publication waits for that release. |
 | 3 | Integration | One iframe per window, page `wwwroot/host/index.html` with the canvas `gridcraft_canvas` `data-host="page"` `data-craft-app="gridcraft"` (ADR 0247 §3). |
 | 4 | Build provenance | As in Kazo Word: first the **official 0.19.1 zip** pinned by SHA-256, in the repository under `wwwroot/gridcraft/` with `gridcraft.json`; then built from the `Kazo-ca/gridcraft` fork (work item 3). |
-| 5 | Save As | **Question Q1 to Benoit** (below). |
-| 6 | Associated formats | **Question Q2 to Benoit** (below). |
+| 5 | Save As | **Q1 = A** (Benoit, 2026-11-13): the window's "Save As…" (`file.saveBytes` then the OS dialog), F12 and Ctrl+Shift+S sent to that command by the proxy; the Save As button of GridCraft's File page stays a Save (listing limit); upstream issue and PR prepared by Claude, published by Benoit. |
+| 6 | Associated formats | **Q2 = A** (Benoit, 2026-11-13): default app for `.xlsx .xlsm .xlsb .xls .ods .slk .csv .tsv`; "Open with" only for `.txt` and `.json`. |
 | 7 | GridCraft chrome | Its title bar and File tab stay (Save, Undo, Search, theme live there); `?chrome` stays a possible setting later. |
 
-## Open questions
+## Questions asked to Benoit
+
+Answered on 2026-11-13: "I agree with your recommendations" (A and A).
 
 **Q1. Save As.** GridCraft always sends `saveAs: false`. When a workbook is bound to
 `~/Documents/Budget.xlsx`, Save As (F12, Ctrl+Shift+S, File › Save As) rewrites `Budget.xlsx`
@@ -122,5 +124,5 @@ repository rules):
 
 - [x] Step 0: reading GridCraft 0.19.1 and the official zip.
 - [x] Plan fr and en.
-- [ ] Benoit's answers to Q1 and Q2.
+- [x] Benoit's answers to Q1 and Q2 (A and A).
 - [ ] Work items 1 to 4.

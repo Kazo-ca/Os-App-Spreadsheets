@@ -55,11 +55,13 @@ Lue sur le fork [`Kazo-ca/gridcraft`](https://github.com/Kazo-ca/gridcraft) (`ma
 | 2 | Code commun | Module `Kazo.Os.AppSdk.Craft` de Kazo OS (ADR 0247, Benoit, 2026-11-13). Kazo Spreadsheets compile contre le sous-module de l'OS sur `craft-host/base` tant que l'OS qui contient le module n'est pas sorti ; sa publication au Store attend cette sortie. |
 | 3 | Intégration | Une iframe par fenêtre, page `wwwroot/host/index.html` avec le canevas `gridcraft_canvas` `data-host="page"` `data-craft-app="gridcraft"` (ADR 0247 §3). |
 | 4 | Provenance du build | Comme Kazo Word : d'abord le **zip officiel 0.19.1** épinglé par SHA-256, dans le dépôt sous `wwwroot/gridcraft/` avec `gridcraft.json` ; ensuite compilé depuis le fork `Kazo-ca/gridcraft` (chantier 3). |
-| 5 | Enregistrer sous | **Question Q1 à Benoit** (voir plus bas). |
-| 6 | Formats associés | **Question Q2 à Benoit** (voir plus bas). |
+| 5 | Enregistrer sous | **Q1 = A** (Benoit, 2026-11-13) : « Enregistrer sous… » de la fenêtre (`file.saveBytes` puis dialogue de l'OS), F12 et Ctrl+Maj+S renvoyés à cette commande par le proxy ; le bouton Enregistrer sous de la page Fichier de GridCraft reste un Enregistrer (limite de la fiche) ; issue et PR amont préparées par Claude, publiées par Benoit. |
+| 6 | Formats associés | **Q2 = A** (Benoit, 2026-11-13) : app par défaut pour `.xlsx .xlsm .xlsb .xls .ods .slk .csv .tsv` ; « Ouvrir avec » seulement pour `.txt` et `.json`. |
 | 7 | Cadre de GridCraft | On garde sa barre de titre et son onglet Fichier (Enregistrer, Annuler, Rechercher, thème y sont) ; `?chrome` reste un réglage possible plus tard. |
 
-## Questions ouvertes
+## Questions posées à Benoit
+
+Réponse le 2026-11-13 : « je suis d'accord avec tes recommandations » (A et A).
 
 **Q1. Enregistrer sous.** GridCraft envoie toujours `saveAs: false`. Si un classeur est lié à
 `~/Documents/Budget.xlsx`, Enregistrer sous (F12, Ctrl+Maj+S, Fichier › Enregistrer sous) réécrit
@@ -123,5 +125,5 @@ dépôts `storytold`) :
 
 - [x] Étape 0 : lecture de GridCraft 0.19.1 et du zip officiel.
 - [x] Plan fr et en.
-- [ ] Réponses de Benoit à Q1 et Q2.
+- [x] Réponses de Benoit à Q1 et Q2 (A et A).
 - [ ] Chantiers 1 à 4.
