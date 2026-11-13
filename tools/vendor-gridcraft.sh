@@ -12,8 +12,9 @@
 # --dir takes a folder laid out like the zip's gridcraft-web-<version>/, as GridCraft's
 # packaging/web/package.sh makes it from the external/gridcraft submodule. The provenance then
 # names the fork and the submodule's commit instead of the zip. tools/build-gridcraft.sh makes
-# that folder and calls this script with it, adding --craft-i18n, --craft-fonts, --rustc and
-# --trunk so the provenance also says what the build used.
+# that folder and calls this script with it, adding --rustc and --trunk so the provenance also says
+# what the build used (--craft-i18n and --craft-fonts stay available, but GridCraft's web release
+# uses neither).
 set -euo pipefail
 
 # The pinned release. Moving to another version changes these three lines, in a PR.

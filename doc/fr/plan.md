@@ -179,6 +179,35 @@ Ctrl+N, enregistrer puis réenregistrer en place, réouverture par `xdg-open`, F
 copie PDF, `.xlsm` non réécrit, garde de fermeture (Annuler, Oui puis Annuler, Oui), Fichier ›
 Ouvrir par le dialogue de l'OS.
 
+## Chantier 3 : compiler GridCraft depuis le fork (2026-11-13)
+
+Même méthode que Kazo Word (`build-wordcraft.yml`) :
+
+| Élément | Rôle |
+| --- | --- |
+| branche `kazo/v0.19.1` du fork `Kazo-ca/gridcraft` | le commit `476448d` de l'étiquette `v0.19.1` d'amont, qui n'est pas sur `main` du fork ; la branche le garde vivant |
+| sous-module `external/gridcraft` | ce commit, `shallow`, branche `kazo/v0.19.1` ; seuls `build-gridcraft.yml` et un poste qui compile le récupèrent |
+| `tools/build-gridcraft.sh` | vérifie Trunk 0.21.14, la cible `wasm32-unknown-unknown` et un sous-module propre, lance `packaging/web/package.sh` de GridCraft (date du commit, `GRIDCRAFT_BUILD_SHA`), puis `tools/vendor-gridcraft.sh --dir --rustc --trunk` |
+| `.github/workflows/build-gridcraft.yml` | à la main : compile, valide le build sur `gridcraft/build-<version>-<commit>`, y lance `ci.yml` (appelable par `workflow_call`) et ouvre la PR ; sur une PR qui touche le build : compile seulement |
+| `GridCraftBuildTests` | une provenance `source-build` doit nommer le fork et le commit du sous-module dans l'index de git |
+
+Ce qui a été décidé en écrivant le code :
+
+- **Ni craft-fonts ni craft-i18n.** Le job web de `craft-common-actions` n'ajoute craft-fonts que si
+  l'app le demande, et GridCraft ne le demande pas : le zip officiel n'a pas de `OFL-*.txt`. Le
+  script vide `CRAFT_FONTS_DIR` et les autres variables pour donner le même contenu.
+- **Les workflows ne récupèrent que le sous-module de l'OS** (`ci.yml`, `publish-packages.yml`,
+  `publish-to-kazoos-store.yml`) : l'app utilise le build versionné, pas les sources.
+- **Rust stable courant.** Un premier build avec le Rust 1.97 du conteneur donnait une colle JS de
+  4 Ko de plus ; avec 1.100 (stable du 2026-11-09, ce que la CI installe) la colle a la taille du
+  zip officiel et ne diffère que par les noms de symboles. Le wasm fait 26,4 Mo (9,6 Mo en gzip -9),
+  0,45 % de plus que l'officiel : le build n'est pas reproductible octet par octet d'une machine à
+  l'autre, comme pour Kazo Word.
+- **Le dépôt garde le build compilé depuis le fork** (provenance `source-build`, commit `476448d`),
+  au lieu du zip officiel ; `tools/vendor-gridcraft.sh` sans argument le reprend au besoin.
+
+Tests : 76 tests xUnit et les 8 parcours Playwright avec le build compilé.
+
 ## Avancement
 
 - [x] Étape 0 : lecture de GridCraft 0.19.1 et du zip officiel.
@@ -186,4 +215,5 @@ Ouvrir par le dialogue de l'OS.
 - [x] Réponses de Benoit à Q1 et Q2 (A et A).
 - [x] Chantier 1 (`spreadsheets/1-solution`) : solution renommée, manifeste, zip 0.19.1 dans `wwwroot/gridcraft/` (paquet `.kazoapp` de 9,7 Mo, 26,5 Mo décompressé), sous-module de l'OS sur 3.3.2 ; la fenêtre montre la version de GridCraft en attendant le module.
 - [x] Chantier 2 (`spreadsheets/2-window`) : fenêtre sur le module `Kazo.Os.AppSdk.Craft`, formats, ouvrir, enregistrer, Enregistrer sous (F12, Ctrl+Shift+S), garde de fermeture, sélecteur, thème, langue ; CI sur `craft-host/base`.
-- [ ] Chantiers 3 et 4.
+- [x] Chantier 3 (`spreadsheets/3-build-from-source`) : fork `Kazo-ca/gridcraft` (branche `kazo/v0.19.1`) en sous-module, `tools/build-gridcraft.sh`, workflow `build-gridcraft.yml`, build compilé depuis le fork dans `wwwroot/gridcraft/`.
+- [ ] Chantier 4.

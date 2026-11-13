@@ -5,15 +5,28 @@
 # decision 2), the submodule sits on craft-host/base and the Release build takes the Kazo OS
 # projects from it (KazoOsUseSource=true): the module is not on nuget.org yet. Work item 4 puts
 # the submodule on the release tag and removes KAZOOS_BRANCH and KAZOOS_USE_SOURCE.
+#
+# The Build GridCraft workflow also calls it on the branch it pushes, since a push made with the
+# workflow token starts no workflow.
 name: CI
 
 on:
   push:
-    branches: [main]
+    branches: [main, "spreadsheets/base"]
   pull_request:
+  workflow_call:
+    inputs:
+      ref:
+        description: Branch to check out and test
+        type: string
+        required: true
 
 permissions:
   contents: read
+
+concurrency:
+  group: "ci-${{ inputs.ref || github.ref }}"
+  cancel-in-progress: true
 
 env:
   KAZOOS_BRANCH: craft-host/base
@@ -25,7 +38,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          submodules: true
+          ref: ${{ inputs.ref || '' }}
+
+      # Only the Kazo OS submodule. external/gridcraft (GridCraft's sources) is only needed to
+      # compile GridCraft (build-gridcraft.yml); the app uses the build in wwwroot/gridcraft/.
+      - name: Fetch the Kazo OS submodule
+        run: git submodule update --init --depth 1 external/KazoOs
 
       - uses: actions/setup-dotnet@v4
         with:

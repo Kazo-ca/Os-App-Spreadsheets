@@ -10,6 +10,8 @@ The spreadsheet of Kazo OS, built on [GridCraft](https://github.com/storytold/gr
 | `src/Kazo.Spreadsheets.Os` | A host that runs the whole Kazo OS with the base apps and this app: the project to start |
 | `tests/Kazo.Spreadsheets.Tests` | Tests of the app |
 | `external/KazoOs` | The Kazo OS repository as a git submodule, on a release tag |
+| `external/gridcraft` | GridCraft's sources (our fork `Kazo-ca/gridcraft`) as a git submodule, only to compile GridCraft |
+| `src/Kazo.Spreadsheets/wwwroot/gridcraft` | The GridCraft web build and its provenance `gridcraft.json`, never edited by hand |
 | `store/` | What the Kazo OS Store shows: icon (PNG 256×256), short descriptions, descriptions, `store.json` |
 
 ## First steps
@@ -60,6 +62,24 @@ dotnet build -c Debug && npm run test:e2e   # Kazo OS in Chromium with Playwrigh
 Until the Kazo OS release that contains the `Kazo.Os.AppSdk.Craft` module, the submodule sits on
 the `craft-host/base` branch of Kazo OS, and CI builds Release from its sources (see the
 [plan](doc/en/plan.md), work item 2).
+
+## Building GridCraft from source
+
+The app uses the GridCraft build committed in `src/Kazo.Spreadsheets/wwwroot/gridcraft/`;
+building the app does not compile GridCraft. To change GridCraft's version, or to take a fix
+of our fork, move the `external/gridcraft` submodule to a commit of the fork
+`Kazo-ca/gridcraft` (branch `kazo/v<version>`), merge that, then run the **Build GridCraft**
+workflow on the branch from the Actions tab: it compiles, commits the build on
+`gridcraft/build-<version>-<commit>`, runs CI there and opens a PR. On a machine:
+
+```bash
+git submodule update --init --depth 1 external/gridcraft
+rustup target add wasm32-unknown-unknown   # Rust 1.95 or later; Trunk 0.21.14
+tools/build-gridcraft.sh
+```
+
+`tools/vendor-gridcraft.sh` alone takes back the official zip pinned by SHA-256. The tests
+check that the provenance names either that zip or the submodule's commit.
 
 ## Publishing to the Kazo OS Store
 

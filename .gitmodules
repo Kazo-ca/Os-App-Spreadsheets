@@ -2,3 +2,8 @@
 	path = external/KazoOs
 	url = https://github.com/Kazo-ca/Os.git
 	shallow = true
+[submodule "external/gridcraft"]
+	path = external/gridcraft
+	url = https://github.com/Kazo-ca/gridcraft.git
+	branch = kazo/v0.19.1
+	shallow = true
