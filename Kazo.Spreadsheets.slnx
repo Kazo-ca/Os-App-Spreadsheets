@@ -1,0 +1,9 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Kazo.Spreadsheets.Os/Kazo.Spreadsheets.Os.csproj" />
+    <Project Path="src/Kazo.Spreadsheets/Kazo.Spreadsheets.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Kazo.Spreadsheets.Tests/Kazo.Spreadsheets.Tests.csproj" />
+  </Folder>
+</Solution>

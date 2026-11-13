@@ -1,7 +1,7 @@
 {
-  "repository": "https://github.com/example/Os-App-MyApp",
-  "project": "src/Kazo.Os.App/Kazo.Os.App.csproj",
+  "repository": "https://github.com/Kazo-ca/Os-App-Spreadsheets",
+  "project": "src/Kazo.Spreadsheets/Kazo.Spreadsheets.csproj",
   "category": "productivity",
-  "tags": ["sample"],
+  "tags": ["spreadsheet", "xlsx", "ods", "gridcraft"],
   "license": "MIT"
 }

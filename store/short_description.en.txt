@@ -1,1 +1,1 @@
-A Kazo OS window app made with the kazoos-solution template.
+A spreadsheet for .xlsx, .ods and .csv workbooks, based on GridCraft by the ArtCraft team.

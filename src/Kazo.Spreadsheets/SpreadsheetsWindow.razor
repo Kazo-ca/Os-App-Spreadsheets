@@ -1,0 +1,33 @@
+@inherits WindowAppBase
+
+<div class="sheet-window" role="application" aria-label="@L["EditorLabel"]">
+    @* craft-host.js (Kazo.Os.AppSdk.Craft) puts GridCraft's iframe in this element; it stays hidden until GridCraft is ready. *@
+    <div class="sheet-frame @(_startup.State == FrameState.Running ? "running" : string.Empty)" @ref="_frameHost"></div>
+
+    @if (_startup.State == FrameState.Loading)
+    {
+        <div class="sheet-screen" role="status">
+            <div class="sheet-spinner" aria-hidden="true"></div>
+            <p class="sheet-screen-title">@L["Loading"]</p>
+            <p class="sheet-screen-hint">@L["LoadingHint"]</p>
+        </div>
+    }
+    else if (_startup.State == FrameState.Failed)
+    {
+        <div class="sheet-screen failed" role="alert">
+            <p class="sheet-screen-title">@L["FailedTitle"]</p>
+            <p class="sheet-screen-detail">@FailureText</p>
+            <p class="sheet-screen-hint">@L["FailedHint"]</p>
+            <button type="button" class="sheet-retry" @onclick="RetryAsync">@L["Retry"]</button>
+        </div>
+    }
+
+    @if (_notice is not null)
+    {
+        @* Over GridCraft, at the bottom right: a failed write, a cancelled save, a copy written. *@
+        <div class="sheet-notice @(_noticeIsError ? "error" : string.Empty)" role="@(_noticeIsError ? "alert" : "status")">
+            <span class="sheet-notice-text">@_notice</span>
+            <button type="button" class="sheet-notice-close" aria-label="@L["Dismiss"]" @onclick="DismissNotice">×</button>
+        </div>
+    }
+</div>

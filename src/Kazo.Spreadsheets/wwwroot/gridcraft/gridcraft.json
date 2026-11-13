@@ -1,0 +1,21 @@
+{
+  "version": "0.19.1",
+  "source": {
+    "kind": "source-build",
+    "repository": "https://github.com/Kazo-ca/gridcraft.git",
+    "commit": "476448d7d9f3a5f8e93fcf7d98b47fd52293fe7f",
+    "rustc": "rustc 1.100.0 (0ef1bc386 2026-11-09)",
+    "trunk": "0.21.14"
+  },
+  "glue": "gridcraft-web-7420f7e09eabf57d.js",
+  "wasm": "gridcraft-web-7420f7e09eabf57d_bg.wasm",
+  "files": [
+    { "path": "ATTRIBUTION.md", "size": 12488, "sha256": "8a8b933beb483bbffd103d589c896ddf4c7a851a8719ce3c47de159a88aed697" },
+    { "path": "LICENSE-APACHE", "size": 10174, "sha256": "0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594" },
+    { "path": "LICENSE-MIT", "size": 1101, "sha256": "a87109bbb1ad43ca3920a5d7ff3806863b7e8470a73f4ded97a1447ac93333f5" },
+    { "path": "NOTICE", "size": 20333, "sha256": "c23f6974c1a3da29fff3af7ae6658849f9432624286f8462d02e9fff98755d54" },
+    { "path": "gridcraft-web-7420f7e09eabf57d.js", "size": 174295, "sha256": "68f49f35274cc8baf1810ae3e376dd5bd302d6a9e4418a5ba0716f2cd8f43d27" },
+    { "path": "gridcraft-web-7420f7e09eabf57d_bg.wasm", "size": 26417213, "sha256": "e82d23a4e9ac691325573110f8fb4aaf4b7d530e19a28be6dbbdd6f415332554" },
+    { "path": "snippets/eframe-d31a8450ea12dfc1/inline0.js", "size": 280, "sha256": "22a98f9d0c5a0532d291bdc9a3050439420b3d11143b4568fcfd3c66fff36995" }
+  ]
+}

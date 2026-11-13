@@ -1,1 +1,1 @@
-Une app fenêtrée Kazo OS créée avec le modèle kazoos-solution.
+Un tableur pour les classeurs .xlsx, .ods et .csv, basé sur GridCraft de l'équipe ArtCraft.
