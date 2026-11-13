@@ -1,8 +1,86 @@
 > [English version](README.md)
 
+<!-- Fiche du Store : générée depuis store/ par .github/scripts/store-readme.mjs. Modifiez store/, puis lancez-le. -->
+
+<img src="store/icon.png" alt="" width="96" align="right">
+
 # Kazo Spreadsheets
 
-Le tableur de Kazo OS, construit sur [GridCraft](https://github.com/storytold/gridcraft) (équipe ArtCraft). En cours : voir le [plan](doc/fr/plan.md). Ce dépôt a été fait avec le modèle `kazoos-solution` ; la fiche du Store remplace cette page au chantier du Store.
+Un tableur pour Kazo OS, pour les classeurs `.xlsx`, `.ods` et `.csv`. Kazo Spreadsheets est basé
+sur [GridCraft](https://github.com/storytold/gridcraft) de l'équipe ArtCraft, un tableur libre
+écrit en Rust, qui tourne ici dans une fenêtre de Kazo OS.
+
+## Calculer
+
+- Feuilles, formules et les fonctions de feuille de calcul attendues (plus de 500), formats de
+  nombre, mise en forme conditionnelle, tableaux, tri et filtres, graphiques, tableaux croisés
+  dynamiques.
+- Le ruban de GridCraft, sa barre de formule, sa recherche de commandes et ses raccourcis.
+- Plusieurs fenêtres à la fois, chacune avec ses classeurs.
+
+## Vos fichiers Kazo OS
+
+- Double-cliquez sur un fichier `.xlsx`, `.xlsm`, `.xlsb`, `.xls`, `.ods`, `.slk`, `.csv` ou `.tsv`
+  dans l'Explorateur de fichiers, ou utilisez « Ouvrir avec » sur un fichier `.txt` ou `.json` :
+  le classeur s'ouvre dans Kazo Spreadsheets.
+- Enregistrer écrit du `.xlsx`. Un `.xlsx` ouvert est réécrit en place ; un autre format n'est
+  jamais écrasé par des données `.xlsx`, donc son premier enregistrement demande un nom dans le
+  dialogue d'enregistrement de Kazo OS. Enregistrer sous (F12 ou Ctrl+Maj+S) et le premier
+  enregistrement d'un nouveau classeur passent aussi par ce dialogue.
+- Les exportations en PDF, CSV et HTML sont des copies : le classeur reste lié à son fichier.
+- Fermer la fenêtre demande avant de perdre des modifications, pour chaque classeur ouvert.
+- Fichier › Ouvrir et les images insérées viennent des fichiers Kazo OS, par le dialogue de
+  Kazo OS.
+- Kazo Spreadsheets suit le thème (clair ou sombre) et la langue de l'OS ; ses réglages sont gardés
+  par utilisateur Kazo OS dans `~/.config/ca.kazo.spreadsheets/`.
+
+## Limites connues
+
+- **GridCraft est en alpha.** La plupart des classeurs s'ouvrent et s'enregistrent bien, mais
+  gardez une copie des plus importants.
+- Le bouton Enregistrer sous de GridCraft (page Fichier) enregistre sous le nom actuel : utilisez
+  F12 ou Ctrl+Maj+S pour Enregistrer sous.
+- **Écritures asiatiques** : la version web de GridCraft n'a pas de police chinoise, japonaise ou
+  coréenne ; ce texte peut ne pas s'afficher, et ces langues d'interface passent en anglais.
+- GridCraft dessine avec **WebGPU ou WebGL 2** : un navigateur ou un ordinateur sans l'un ni l'autre
+  montre un écran d'erreur au lieu du classeur.
+- Le téléchargement fait environ 10 Mo (27 Mo une fois installé), et chaque fenêtre charge sa propre
+  copie de GridCraft.
+- La fenêtre reste sur l'écran où elle s'est ouverte : la passer sur un autre écran rechargerait
+  GridCraft et perdrait les classeurs ouverts.
+- L'impression passe par le dialogue d'impression du navigateur.
+- Demande Kazo OS 3.3.3 ou plus récent.
+
+## Licence
+
+Kazo Spreadsheets est un logiciel libre sous licence MIT. GridCraft est sous licence MIT ou
+Apache-2.0 ; ses avis et les licences des polices qu'il contient sont livrés avec l'app (voir
+`THIRD-PARTY-NOTICES-fr.md` dans le dépôt). Le nom et les logos ArtCraft sont des marques de
+l'équipe ArtCraft et ne sont pas utilisés par Kazo Spreadsheets.
+
+## Captures d'écran
+
+<p>
+  <img src="store/screenshots/1.png" alt="Kazo Spreadsheets, capture 1" height="240">
+  <img src="store/screenshots/2.png" alt="Kazo Spreadsheets, capture 2" height="240">
+  <img src="store/screenshots/3.png" alt="Kazo Spreadsheets, capture 3" height="240">
+</p>
+
+<!-- /Fiche du Store -->
+
+## Essayer
+
+[Ouvrir Kazo Spreadsheets dans Kazo OS](https://os.kazo.ca/?autolaunch=ca.kazo.spreadsheets) : le lien démarre Kazo OS, installe l'app depuis le Store officiel et l'ouvre.
+
+Ou ouvrez [Kazo OS](https://os.kazo.ca/) et installez Kazo Spreadsheets depuis le **Kazo OS Store** (catégorie Productivité), ou dans le Terminal de Kazo OS, en administrateur : `sudo kazopkg install Kazo-ca/Os-App-Spreadsheets`.
+
+## À propos de Kazo OS
+
+[Kazo OS](https://github.com/Kazo-ca/Os) est un système d'exploitation simulé qui tourne dans le navigateur, écrit en C# avec Blazor WebAssembly. Il offre un environnement complet pour développer et exécuter des applications : bureau et fenêtres, système de fichiers persistant, processus, shell POSIX, réseau simulé, le Kazo OS Store, et un SDK public (paquets NuGet) pour créer des apps comme celle-ci. Essayez-le sur <https://os.kazo.ca/> (PWA, fonctionne hors ligne).
+
+## Développement
+
+- Plan : [plan](doc/fr/plan.md). Les avis de GridCraft et les licences du paquet : [THIRD-PARTY-NOTICES-fr.md](THIRD-PARTY-NOTICES-fr.md).
 
 | Dossier | Contenu |
 | --- | --- |
@@ -11,10 +89,12 @@ Le tableur de Kazo OS, construit sur [GridCraft](https://github.com/storytold/gr
 | `tests/Kazo.Spreadsheets.Tests` | Les tests de l'app |
 | `external/KazoOs` | Le dépôt Kazo OS en sous-module git, sur un tag de release |
 | `external/gridcraft` | Les sources de GridCraft (notre fork `Kazo-ca/gridcraft`) en sous-module git, seulement pour compiler GridCraft |
+| `tests/installed` | L'app telle que le Store l'installe, dans un Kazo OS publié : `kazopkg install`, un classeur ouvert par double-clic, les captures du Store |
+| `THIRD-PARTY-NOTICES-fr.md` | GridCraft et ce qu'il embarque ; lié dans le paquet avec `LICENSE` (`wwwroot/legal/`) |
 | `src/Kazo.Spreadsheets/wwwroot/gridcraft` | Le build web de GridCraft et sa provenance `gridcraft.json`, jamais modifiés à la main |
-| `store/` | Ce que montre le Kazo OS Store : icône (PNG 256×256), descriptions courtes, descriptions, `store.json` |
+| `store/` | Ce que montre le Kazo OS Store : icône (PNG 256×256), descriptions courtes, descriptions, captures, `store.json` |
 
-## Premiers pas
+### Premiers pas
 
 ```bash
 # Un dépôt créé depuis le template GitHub a déjà le sous-module :
@@ -29,7 +109,7 @@ git -C external/KazoOs checkout v<version de Kazo OS>
 Ouvrez ensuite `Kazo.Spreadsheets.slnx` dans Visual Studio ou Rider et démarrez `Kazo.Spreadsheets.Os`,
 ou lancez `dotnet run --project src/Kazo.Spreadsheets.Os`.
 
-## La version de Kazo OS
+### La version de Kazo OS
 
 `external/KazoOs/wasm2/KazoOs/build/Versions.props` est la version de Kazo OS de ce dépôt.
 Pour changer de version, placez le sous-module sur son tag et validez-le :
@@ -43,7 +123,7 @@ git add external/KazoOs
 Ne modifiez jamais le sous-module : on ne modifie pas l'OS depuis un dépôt d'app, et la CI refuse
 un sous-module modifié ou hors de son tag.
 
-## Deux profils de build
+### Deux profils de build
 
 | Profil | Kazo OS vient de | Usage |
 | --- | --- | --- |
@@ -52,18 +132,30 @@ un sous-module modifié ou hors de son tag.
 
 Forcez l'un ou l'autre avec `-p:KazoOsUseSource=true` ou `false`.
 
-## Tests
+### Tests
 
 ```bash
 dotnet test                       # tests unitaires (Debug : les projets Kazo OS du sous-module)
 dotnet build -c Debug && npm run test:e2e   # Kazo OS dans Chromium avec Playwright : GridCraft, ouvrir, enregistrer, fermer
 ```
 
-En attendant la version de Kazo OS qui contient le module `Kazo.Os.AppSdk.Craft`, le sous-module
-est sur la branche `craft-host/base` de Kazo OS, et la CI construit Release depuis ses sources
-(voir le [plan](doc/fr/plan.md), chantier 2).
+L'app telle que le Store l'installe, dans un Kazo OS publié (pas dans la CI : quelques minutes) :
 
-## Compiler GridCraft depuis les sources
+```bash
+dotnet build src/Kazo.Spreadsheets -c Release -t:KazoOsPack
+# kazoos-wasm-<version>.zip d'une version de Kazo OS (3.3.3 ou plus), décompressé dans <os>
+npm run test:installed -- <os> [dossier des paquets] [dossier des captures]
+npm run test:installed -- --store <os>   # après une version : installe depuis le vrai Kazo OS Store
+```
+
+Il installe Kazo Spreadsheets avec `sudo kazopkg install Kazo-ca/Os-App-Spreadsheets` (GitHub
+répondu depuis les paquets locaux), enregistre un `.xlsx`, double-clique dessus dans l'Explorateur
+de fichiers et vérifie que Kazo Spreadsheets l'ouvre. Avec un dossier de captures, il écrit aussi
+les captures du Store (`store/screenshots/`, les classeurs d'exemple de GridCraft). Après une
+modification de `store/`, lancer `npm run store:readme` pour que le haut de cette page montre la
+même fiche (la CI le vérifie).
+
+### Compiler GridCraft depuis les sources
 
 L'app utilise le build de GridCraft versionné dans `src/Kazo.Spreadsheets/wwwroot/gridcraft/` ;
 construire l'app ne compile pas GridCraft. Pour changer de version de GridCraft, ou prendre un
@@ -81,7 +173,7 @@ tools/build-gridcraft.sh
 `tools/vendor-gridcraft.sh` seul reprend le zip officiel épinglé par SHA-256. Les tests vérifient
 que la provenance nomme soit ce zip, soit le commit du sous-module.
 
-## Publier dans le Kazo OS Store
+### Publier dans le Kazo OS Store
 
 1. Remplissez `store/` (icône, descriptions courtes, descriptions, catégorie et étiquettes dans `store.json`).
 2. Changez `Version` dans la classe `[AppManifest]` de l'app et validez-la dans `main`, puis posez le
@@ -106,7 +198,7 @@ que la provenance nomme soit ce zip, soit le commit du sous-module.
 Le catalogue ne prend jamais de binaire de votre part : une fois votre pull request relue et
 fusionnée, sa CI compile l'app au commit du tag.
 
-## Publier sur la branche `kazoos-packages`
+### Publier sur la branche `kazoos-packages`
 
 Le même tag `v*` lance aussi **Publish the Kazo OS packages** : il fait le paquet de l'app et le
 pousse sur la branche `kazoos-packages` de ce dépôt, en gardant les versions déjà publiées. Les

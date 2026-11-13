@@ -92,6 +92,9 @@ public sealed class SpreadsheetsApp : AppDefinition
     /// <remarks>
     /// Sizes are the outer size of the OS window (title bar included): 1100 × 760 by default, room
     /// for GridCraft's ribbon and about a dozen columns; at least GridCraft's minimum plus the frame.
+    /// The window stays on its screen (ADR 0263 of Kazo OS, issue #4): moving it to another screen
+    /// moves it into another browser document, which reloads GridCraft's iframe and loses the
+    /// workbooks it holds.
     /// </remarks>
     public override WindowOptions? Window => new()
     {
@@ -99,6 +102,7 @@ public sealed class SpreadsheetsApp : AppDefinition
         DefaultHeight = 760,
         MinWidth = ContentMinWidth + WindowChromeWidth,
         MinHeight = ContentMinHeight + WindowChromeHeight,
+        CanChangeScreen = false,
     };
 
     // Borders and title bar of an OS window (the tallest title bar of the Kazo OS themes, 2.35rem).
