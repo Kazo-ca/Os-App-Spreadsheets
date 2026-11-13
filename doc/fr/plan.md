@@ -124,14 +124,13 @@ dépôts `storytold`) :
 ## Chantier 2 : la fenêtre (2026-11-13)
 
 La fenêtre tourne sur le module `Kazo.Os.AppSdk.Craft` de la série `craft-host/base` (sous-module
-de l'OS sur `940ccd9`). Ce que Kazo Spreadsheets garde à lui :
+de l'OS sur `940ccd9`, puis `3788bfb`). Ce que Kazo Spreadsheets garde à lui :
 
 | Fichier | Rôle |
 | --- | --- |
 | `wwwroot/host/index.html` | page de l'iframe : canevas `gridcraft_canvas` `data-craft-app="gridcraft"` `data-craft-build="../gridcraft/gridcraft.json"`, `craft-proxy.js` et `craft-page.css` du module |
 | `Documents/SpreadsheetFormats.cs` | formats de la décision 6 (Q2 = A), copies PDF et HTML, nom d'enregistrement (`SaveNameOf`), « tout ce qui n'est pas `.xlsx` est une copie » (`IsCopyName`) |
-| `Documents/GridCraftWorkbooks.cs` | lit `ui.inspect` de GridCraft (`documents[{title, dirty}]` et `windows[{doc, index, active}]`) pour la garde de fermeture |
-| `Hosting/GridCraftLanguage.cs` | code de langue de GridCraft (deux lettres) ; chinois, japonais et coréen restent en anglais (pas de police CJK dans la version web) |
+| `Hosting/GridCraftLanguage.cs` | langues de GridCraft (deux lettres), choisies par `CraftLanguage.Pick` du module ; chinois, japonais et coréen restent en anglais (pas de police CJK dans la version web) |
 | `Hosting/SpreadsheetKeys.cs` | raccourcis réservés : ceux de l'OS, Ctrl+N (nouvelle fenêtre), F12 et Ctrl+Shift+S (Enregistrer sous) |
 | `SpreadsheetsWindow.*` | démarrage, réessai et délai, ouvrir, enregistrer, Enregistrer sous, fermeture, sélecteur de fichiers, réglages, thème, langue, auteur |
 
@@ -171,6 +170,12 @@ Ce qui a été décidé en écrivant le code :
 - **Retour au module** (envoyé à la série `craft-host`) : `OpenDocument.ListFrom` lit la réponse de
   WordCraft (`documents[].id`, `path`) et rend une liste vide pour GridCraft ; `CraftLanguage.Pick`
   donne les codes de WordCraft (`zh-hans`, `pt-br`). Kazo Spreadsheets a les siens.
+- **Suite (chantier 2b, `spreadsheets/2b-module-helpers`).** Le module a pris ce retour (Os#489,
+  `craft-host/base` `3788bfb`) : la garde de fermeture lit `ui.inspect` avec
+  `OpenDocument.ListFrom(inspect, SpreadsheetFormats.SaveNameOf)` et `GridCraftWorkbooks.cs` est
+  retiré ; `GridCraftLanguage.Pick` passe la liste de GridCraft à `CraftLanguage.Pick`, qui se
+  replie sur les deux lettres (`pt`, `sr`). Même comportement, testé (81 tests xUnit, 8 parcours
+  Playwright).
 
 Tests : 76 tests xUnit (manifeste, formats, `ui.inspect`, langue, raccourcis, page de l'iframe,
 textes fr et en) et 8 parcours Playwright dans l'OS (`npm run test:e2e` après

@@ -13,6 +13,9 @@ public sealed class GridCraftLanguageTests
     [InlineData("pt-BR", "pt")]
     [InlineData("de-DE", "de")]
     [InlineData("uk-UA", "uk")]
+    [InlineData("pt-PT", "pt")]
+    [InlineData("sr-Latn-RS", "sr")]
+    [InlineData("sr-Cyrl-RS", "sr")]
     public void A_language_GridCraft_has_is_kept(string culture, string expected)
     {
         Assert.Equal(expected, GridCraftLanguage.Pick(CultureInfo.GetCultureInfo(culture)));
@@ -21,6 +24,7 @@ public sealed class GridCraftLanguageTests
     [Theory]
     [InlineData("ja-JP")]
     [InlineData("zh-CN")]
+    [InlineData("zh-TW")]
     [InlineData("ko-KR")]
     [InlineData("sv-SE")]
     [InlineData("ar")]
