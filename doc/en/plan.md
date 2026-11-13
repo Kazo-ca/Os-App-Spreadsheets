@@ -123,14 +123,13 @@ repository rules):
 ## Work item 2: the window (2026-11-13)
 
 The window runs on the `Kazo.Os.AppSdk.Craft` module of the `craft-host/base` series (OS submodule
-at `940ccd9`). What Kazo Spreadsheets keeps for itself:
+at `940ccd9`, then `3788bfb`). What Kazo Spreadsheets keeps for itself:
 
 | File | Role |
 | --- | --- |
 | `wwwroot/host/index.html` | iframe page: canvas `gridcraft_canvas` `data-craft-app="gridcraft"` `data-craft-build="../gridcraft/gridcraft.json"`, the module's `craft-proxy.js` and `craft-page.css` |
 | `Documents/SpreadsheetFormats.cs` | formats of decision 6 (Q2 = A), PDF and HTML copies, save name (`SaveNameOf`), "everything that is not `.xlsx` is a copy" (`IsCopyName`) |
-| `Documents/GridCraftWorkbooks.cs` | reads GridCraft's `ui.inspect` (`documents[{title, dirty}]` and `windows[{doc, index, active}]`) for the close guard |
-| `Hosting/GridCraftLanguage.cs` | GridCraft's language code (two letters); Chinese, Japanese and Korean stay English (no CJK font in the web build) |
+| `Hosting/GridCraftLanguage.cs` | GridCraft's languages (two letters), chosen by the module's `CraftLanguage.Pick`; Chinese, Japanese and Korean stay English (no CJK font in the web build) |
 | `Hosting/SpreadsheetKeys.cs` | reserved chords: the OS ones, Ctrl+N (new window), F12 and Ctrl+Shift+S (Save As) |
 | `SpreadsheetsWindow.*` | start, retry and timeout, open, save, Save As, close, file picker, settings, theme, language, author |
 
@@ -167,6 +166,11 @@ What was decided while writing the code:
 - **Feedback to the module** (sent to the `craft-host` series): `OpenDocument.ListFrom` reads
   WordCraft's answer (`documents[].id`, `path`) and returns an empty list for GridCraft;
   `CraftLanguage.Pick` gives WordCraft's codes (`zh-hans`, `pt-br`). Kazo Spreadsheets has its own.
+- **Follow-up (work item 2b, `spreadsheets/2b-module-helpers`).** The module took that feedback
+  (Os#489, `craft-host/base` `3788bfb`): the close guard reads `ui.inspect` with
+  `OpenDocument.ListFrom(inspect, SpreadsheetFormats.SaveNameOf)` and `GridCraftWorkbooks.cs` is
+  gone; `GridCraftLanguage.Pick` gives GridCraft's list to `CraftLanguage.Pick`, which falls back to
+  two letters (`pt`, `sr`). Same behaviour, tested (81 xUnit tests, 8 Playwright runs).
 
 Tests: 76 xUnit tests (manifest, formats, `ui.inspect`, language, chords, iframe page, fr and en
 texts) and 8 Playwright runs in the OS (`npm run test:e2e` after `dotnet build -c Debug`): WebGPU,

@@ -80,7 +80,7 @@ public sealed partial class SpreadsheetsWindow : IWindowCloseGuard
 
     /// <summary>
     /// Asks before closing a window with work that is not in a file: GridCraft lists every workbook
-    /// of its page (<c>ui.inspect</c>, read by <see cref="GridCraftWorkbooks"/>); "Yes" saves each
+    /// of its page (<c>ui.inspect</c>, read by the module's <see cref="OpenDocument.ListFrom(System.Text.Json.JsonElement, Func{string, string?})"/>, each named by <see cref="SpreadsheetFormats.SaveNameOf"/>); "Yes" saves each
     /// one and closes only once every write succeeded.
     /// </summary>
     /// <param name="cancellationToken">Cancels the close request.</param>
@@ -112,7 +112,7 @@ public sealed partial class SpreadsheetsWindow : IWindowCloseGuard
             return discard.Result == MessageBoxResult.Yes;
         }
 
-        IReadOnlyList<OpenDocument> unsaved = _session.WithUnsavedWork(GridCraftWorkbooks.ListFrom(inspect.Value));
+        IReadOnlyList<OpenDocument> unsaved = _session.WithUnsavedWork(OpenDocument.ListFrom(inspect.Value, SpreadsheetFormats.SaveNameOf));
         if (unsaved.Count == 0)
         {
             return true;

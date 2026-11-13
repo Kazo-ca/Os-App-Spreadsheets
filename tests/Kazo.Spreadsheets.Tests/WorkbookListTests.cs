@@ -4,10 +4,17 @@ using Kazo.Spreadsheets.Documents;
 
 namespace Kazo.Spreadsheets.Tests;
 
-/// <summary>GridCraft's <c>ui.inspect</c> answer, read for the close guard.</summary>
-public sealed class GridCraftWorkbooksTests
+/// <summary>
+/// GridCraft's <c>ui.inspect</c> answer, read for the close guard by the module's
+/// <see cref="OpenDocument.ListFrom(JsonElement, Func{string, string?})"/> with the save name of
+/// <see cref="SpreadsheetFormats.SaveNameOf"/>.
+/// </summary>
+public sealed class WorkbookListTests
 {
     private static JsonElement Json(string text) => JsonDocument.Parse(text).RootElement.Clone();
+
+    // What SpreadsheetsWindow.ConfirmCloseAsync does with the answer.
+    private static IReadOnlyList<OpenDocument> Workbooks(JsonElement inspect) => OpenDocument.ListFrom(inspect, SpreadsheetFormats.SaveNameOf);
 
     [Fact]
     public void Each_workbook_is_listed_once_with_its_id_save_name_and_state()
@@ -24,7 +31,7 @@ public sealed class GridCraftWorkbooksTests
             }
             """);
 
-        IReadOnlyList<OpenDocument> workbooks = GridCraftWorkbooks.ListFrom(inspect);
+        IReadOnlyList<OpenDocument> workbooks = Workbooks(inspect);
 
         Assert.Equal(
             [
@@ -38,10 +45,11 @@ public sealed class GridCraftWorkbooksTests
     [InlineData("null")]
     [InlineData("[]")]
     [InlineData("""{ "documents": [] }""")]
-    [InlineData("""{ "documents": [ { "id": 1, "path": "/a.docx" } ], "activeDocument": 0 }""")]
-    public void An_answer_that_is_not_GridCraft_s_lists_nothing(string text)
+    [InlineData("""{ "documents": [ { "title": "Book1", "dirty": true } ] }""")]
+    [InlineData("""{ "documents": [ { "title": "Book1", "dirty": true } ], "windows": {} }""")]
+    public void An_answer_without_workbooks_and_their_windows_lists_nothing(string text)
     {
-        Assert.Empty(GridCraftWorkbooks.ListFrom(Json(text)));
+        Assert.Empty(Workbooks(Json(text)));
     }
 
     [Fact]
@@ -61,7 +69,7 @@ public sealed class GridCraftWorkbooksTests
             }
             """);
 
-        OpenDocument workbook = Assert.Single(GridCraftWorkbooks.ListFrom(inspect));
+        OpenDocument workbook = Assert.Single(Workbooks(inspect));
         Assert.Equal(8, workbook.Id);
         Assert.True(workbook.Dirty);
     }
@@ -80,7 +88,7 @@ public sealed class GridCraftWorkbooksTests
             }
             """);
 
-        IReadOnlyList<OpenDocument> unsaved = session.WithUnsavedWork(GridCraftWorkbooks.ListFrom(inspect));
+        IReadOnlyList<OpenDocument> unsaved = session.WithUnsavedWork(Workbooks(inspect));
 
         Assert.Equal([2L, 3L], unsaved.Select(workbook => workbook.Id));
     }
