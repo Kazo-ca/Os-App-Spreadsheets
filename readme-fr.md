@@ -184,6 +184,9 @@ que la provenance nomme soit ce zip, soit le commit du sous-module.
    `apps/<appId>_<version>/`. Avec un secret `HACK_STORE_TOKEN` (un jeton qui peut créer un fork et
    ouvrir des pull requests), il ouvre la pull request vers `Kazo-ca/Os-AppMarketPlace` depuis
    votre fork ; sans lui, téléchargez l'artefact du workflow et ouvrez la pull request vous-même.
+   Dans l'organisation `Kazo-ca`, l'automate de Kazo OS (secrets d'organisation
+   `KAZO_AUTOMATION_APP_ID` et `KAZO_AUTOMATION_APP_KEY`) l'ouvre d'abord, depuis la branche
+   `submit/<appId>_<version>` ; une version avec un suffixe va dans la branche `beta` du catalogue.
 
 `HACK_STORE_TOKEN` est un jeton d'accès personnel GitHub à vous, que Kazo OS ne fournit pas :
 
@@ -197,6 +200,25 @@ que la provenance nomme soit ce zip, soit le commit du sous-module.
 
 Le catalogue ne prend jamais de binaire de votre part : une fois votre pull request relue et
 fusionnée, sa CI compile l'app au commit du tag.
+
+### Suivre les nouvelles versions de Kazo OS
+
+Le workflow **Kazo OS SDK update** (`sdk-update.yml`) tourne toutes les heures, quand Kazo OS
+annonce une version, ou à la main depuis l'onglet Actions. Quand Kazo OS a une version plus récente,
+il y déplace le sous-module, monte la version de l'app (`.github/scripts/bump-app-version.sh`) sur
+une branche `kazoos-sdk/<version>` et y lance la CI :
+
+- une préversion de Kazo OS : la branche `beta` la reçoit, en version `x.y.(z+1)-beta.<n>`, qui va
+  dans le canal bêta du Kazo OS Store ;
+- une version stable mineure ou majeure : une pull request vers `main`, fusionnée, taguée et publiée ;
+- une version stable corrective : vérifiée seulement, rien n'est publié.
+
+Une CI rouge ouvre une issue `TODO` et ne change rien. Une version avec un suffixe (`1.2.1-beta.1`)
+se publie toujours depuis `beta`, une version sans suffixe depuis `main`. Les workflows de ce dépôt
+sont courts : ils appellent les workflows partagés de
+[Kazo-ca/Os-AppTemplate](https://github.com/Kazo-ca/Os-AppTemplate) (`@v1`), qui s'améliorent sans
+changement ici. Sans les secrets de l'automate de Kazo OS, autorisez GitHub Actions à créer des pull
+requests (**Settings** ▸ **Actions** ▸ **General**) pour que la mise à jour ouvre sa pull request.
 
 ### Publier sur la branche `kazoos-packages`
 
