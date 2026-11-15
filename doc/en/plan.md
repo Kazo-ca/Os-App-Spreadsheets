@@ -187,7 +187,7 @@ Same method as Kazo Word (`build-wordcraft.yml`):
 | `kazo/v0.19.1` branch of the `Kazo-ca/gridcraft` fork | commit `476448d` of upstream tag `v0.19.1`, which is not on the fork's `main`; the branch keeps it alive |
 | `external/gridcraft` submodule | that commit, `shallow`, branch `kazo/v0.19.1`; only `build-gridcraft.yml` and a machine that compiles fetch it |
 | `tools/build-gridcraft.sh` | checks Trunk 0.21.14, the `wasm32-unknown-unknown` target and a clean submodule, runs GridCraft's `packaging/web/package.sh` (commit date, `GRIDCRAFT_BUILD_SHA`), then `tools/vendor-gridcraft.sh --dir --rustc --trunk` |
-| `.github/workflows/build-gridcraft.yml` | by hand: compiles, commits the build on `gridcraft/build-<version>-<commit>`, runs `ci.yml` there (callable through `workflow_call`) and opens the PR; on a PR that touches the build: compiles only |
+| `.github/workflows/build-gridcraft.yml` | by hand: compiles, commits the build on `gridcraft/build-<version>-<commit>`, runs the CI there (the shared `kazoos-ci.yml` of `Kazo-ca/Os-AppTemplate@v1`, which `ci.yml` calls too) and opens the PR; on a PR that touches the build: compiles only |
 | `GridCraftBuildTests` | a `source-build` provenance must name the fork and the submodule's commit in git's index |
 
 What was decided while writing the code:
