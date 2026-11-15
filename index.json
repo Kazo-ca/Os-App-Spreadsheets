@@ -2,6 +2,11 @@
   "appId": "ca.kazo.spreadsheets",
   "versions": [
     {
+      "version": "0.1.1-beta.1",
+      "path": "0.1.1-beta.1/ca.kazo.spreadsheets-0.1.1-beta.1.kazoapp",
+      "sha256": "71a82cc2f5e5f254a67ae972f5daf4ec2cef111e8ba607a5fa63f82ac7ca2a0d"
+    },
+    {
       "version": "0.1.0",
       "path": "0.1.0/ca.kazo.spreadsheets-0.1.0.kazoapp",
       "sha256": "48e74e6a701be52d83633efe514542064094fc02bc719c250440b7dd9772ce0b"
