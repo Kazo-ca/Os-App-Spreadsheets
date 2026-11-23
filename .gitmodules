@@ -5,5 +5,5 @@
 [submodule "external/gridcraft"]
 	path = external/gridcraft
 	url = https://github.com/Kazo-ca/gridcraft.git
-	branch = kazo/v0.19.1
+	branch = kazo/v0.20.0
 	shallow = true

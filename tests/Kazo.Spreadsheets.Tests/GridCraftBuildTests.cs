@@ -44,7 +44,7 @@ public sealed partial class GridCraftBuildTests
     [Fact]
     public void The_wasm_stays_under_the_Kazo_OS_file_size_limit()
     {
-        // ADR 0245 of Kazo OS: 128 MiB per file. GridCraft 0.19.1 is 26 MB.
+        // ADR 0245 of Kazo OS: 128 MiB per file. GridCraft 0.20.0 is about 26 MB.
         const long maximumFileBytes = 128L * 1024 * 1024;
         FileInfo wasm = new(Path.Combine(BuildFolder, Provenance.GetProperty("wasm").GetString()!));
         Assert.InRange(wasm.Length, 1, maximumFileBytes);

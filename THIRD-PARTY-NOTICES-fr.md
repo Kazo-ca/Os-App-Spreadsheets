@@ -14,7 +14,7 @@ Il embarque une seule œuvre tierce, **GridCraft**, qui apporte ses propres él�
 | | |
 | --- | --- |
 | Œuvre | [GridCraft](https://github.com/storytold/gridcraft), un tableur écrit en Rust, de l'équipe ArtCraft et des contributeurs de GridCraft |
-| Version | 0.19.1, compilée depuis notre fork [`Kazo-ca/gridcraft`](https://github.com/Kazo-ca/gridcraft) (branche `kazo/v0.19.1`, l'étiquette amont, sans modification) |
+| Version | 0.20.0, compilée depuis notre fork [`Kazo-ca/gridcraft`](https://github.com/Kazo-ca/gridcraft) (branche `kazo/v0.20.0` : le commit `ab65ee8e` « Release: GridCraft v0.20.0 » de la branche amont `release`, pas encore étiqueté en amont, sans modification) |
 | Licence | MIT ou Apache-2.0, au choix de l'utilisateur |
 | Fichiers | `src/Kazo.Spreadsheets/wwwroot/gridcraft/` (la version web : `.js`, `.wasm`, `snippets/`) |
 | Provenance | `src/Kazo.Spreadsheets/wwwroot/gridcraft/gridcraft.json` : le commit du fork, les compilateurs et le SHA-256 de chaque fichier |
