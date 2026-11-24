@@ -14,7 +14,7 @@ It bundles one third-party work, **GridCraft**, which brings its own third-party
 | | |
 | --- | --- |
 | Work | [GridCraft](https://github.com/storytold/gridcraft), a spreadsheet written in Rust, by the ArtCraft team and the GridCraft contributors |
-| Version | 0.19.1, compiled from our fork [`Kazo-ca/gridcraft`](https://github.com/Kazo-ca/gridcraft) (branch `kazo/v0.19.1`, the upstream tag, unmodified) |
+| Version | 0.20.0, compiled from our fork [`Kazo-ca/gridcraft`](https://github.com/Kazo-ca/gridcraft) (branch `kazo/v0.20.0`: the upstream `release` branch commit `ab65ee8e` "Release: GridCraft v0.20.0", not tagged upstream yet, unmodified) |
 | License | MIT or Apache-2.0, at the user's option |
 | Files | `src/Kazo.Spreadsheets/wwwroot/gridcraft/` (the web build: `.js`, `.wasm`, `snippets/`) |
 | Provenance | `src/Kazo.Spreadsheets/wwwroot/gridcraft/gridcraft.json`: the fork's commit, the compilers, and the SHA-256 of every file |

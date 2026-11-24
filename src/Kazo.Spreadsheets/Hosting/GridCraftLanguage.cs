@@ -9,7 +9,7 @@ namespace Kazo.Spreadsheets.Hosting;
 /// </summary>
 /// <remarks>
 /// The choice is the module's <see cref="CraftLanguage.Pick"/>, which falls back to the two-letter
-/// code (<c>pt</c>, <c>sr</c>) when the app offers no other. GridCraft 0.19.1 takes two-letter codes
+/// code (<c>pt</c>, <c>sr</c>) when the app offers no other. GridCraft (0.19.1, 0.20.0) takes two-letter codes
 /// and has no command that lists them, so the list is here. Chinese, Japanese and Korean stay English: the
 /// web build has no CJK font, so their labels would not draw (GridCraft does the same with the
 /// browser language).

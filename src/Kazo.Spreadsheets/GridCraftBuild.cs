@@ -12,7 +12,7 @@ public static class GridCraftBuild
     /// <c>wwwroot/gridcraft/gridcraft.json</c> by a test, so the window can show it without reading
     /// the file at run time.
     /// </summary>
-    public const string Version = "0.19.1";
+    public const string Version = "0.20.0";
 
     /// <summary>Folder of the build under the app's static files (<c>_content/Kazo.Spreadsheets/</c>).</summary>
     public const string Folder = "gridcraft";
